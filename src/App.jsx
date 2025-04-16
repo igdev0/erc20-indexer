@@ -20,8 +20,8 @@ function App() {
 
   async function getTokenBalance() {
     const config = {
-      apiKey: '<-- COPY-PASTE YOUR ALCHEMY API KEY HERE -->',
-      network: Network.ETH_MAINNET,
+      apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
+      network: Network.ETH_SEPOLIA,
     };
 
     const alchemy = new Alchemy(config);
