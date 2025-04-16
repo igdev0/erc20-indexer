@@ -20,7 +20,9 @@ function App() {
   const [hasQueried, setHasQueried] = useState(false);
   const [tokenDataObjects, setTokenDataObjects] = useState([]);
 
-  async function getTokenBalance(address = userAddress) {
+  async function getTokenBalance(argAddr) {
+    console.log(argAddr)
+    const address = argAddr ? argAddr : userAddress;
     const config = {
       apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
       network: Network.ETH_SEPOLIA,
@@ -105,11 +107,11 @@ function App() {
           bgColor="white"
           fontSize={24}
         />
-        <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor="skyblue">
+        <Button fontSize={20} onClick={() => getTokenBalance()} mt={36} bgColor="skyblue">
           Check ERC-20 Token Balances
         </Button>
         <Heading my={36}>ERC-20 token balances:</Heading>
-        {isFetching && <Spinner color="teal.500" size="lg" />}
+        {isFetching && <Spinner color="teal.500" style={{width: 50, height: 50}} />}
         {hasQueried ? (
           <SimpleGrid w={'90vw'} columns={4} spacing={24}>
             {results.tokenBalances.map((e, i) => {
@@ -132,7 +134,7 @@ function App() {
                       tokenDataObjects[i].decimals
                     )}
                   </Box>
-                  <Image src={tokenDataObjects[i].logo} />
+                  <Image src={tokenDataObjects[i].logo} width={30} height={30}/>
                 </Flex>
               );
             })}
