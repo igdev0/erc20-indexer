@@ -30,8 +30,14 @@ function App() {
     if(!isAddress(address)) {
       try {
         address = await provider.resolveName(address);
+        if(!address) {
+          setError("Unable to resolve ens");
+          setIsFetching(false);
+          return;
+        }
       } catch (err) {
         setError("Unable to resolve ens");
+        setIsFetching(false);
         return;
       }
     }
@@ -97,13 +103,13 @@ function App() {
             Plug in an address and this website will return all of its ERC-20
             token balances!
           </Text>
+          {
+              error &&
+              <Text color="red">
+                {error}
+              </Text>
+          }
         </Flex>
-        {
-          error &&
-        <Text color="red">
-          {error}
-        </Text>
-        }
       </Center>
       <Flex
         w="100%"
