@@ -19,14 +19,14 @@ function App() {
   const [hasQueried, setHasQueried] = useState(false);
   const [tokenDataObjects, setTokenDataObjects] = useState([]);
 
-  async function getTokenBalance() {
+  async function getTokenBalance(address = userAddress) {
     const config = {
       apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
       network: Network.ETH_SEPOLIA,
     };
 
     const alchemy = new Alchemy(config);
-    const data = await alchemy.core.getTokenBalances(userAddress);
+    const data = await alchemy.core.getTokenBalances(address);
 
     setResults(data);
 
@@ -44,22 +44,20 @@ function App() {
   }
 
   async function signIn() {
-    const msg = {
-      msg: `Sign in wih indexer app`,
-      nonce: Math.random() * 100
-    }
-
-
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const exampleMessage = "Example `personal_sign` message."
     try {
-      const [from] = await provider.listAccounts();
-      // For historical reasons, you must submit the message to sign in hex-encoded UTF-8.
-      // This uses a Node.js-style buffer shim in the browser.
-      const msg = `0x${Buffer.from(exampleMessage, "utf8").toString("hex")}`
-      const sign = await provider.send("personal_sign", [msg, from]);
-      console.log(sign);
-      setUserAddress(from)
+      const [from] = await provider.send("eth_requestAccounts", []);
+
+      const nonce = Math.random() * Math.pow(10, 81);
+      const message = `Signing in with account nonce: ${nonce}`;
+      const msg = `0x${Buffer.from(message, "utf8").toString("hex")}`;
+
+      const signature = await provider.send("personal_sign", [msg, from]);
+      const valid = ethers.utils.verifyMessage(message, signature);
+      if(valid.toLowerCase() === from) {
+        setUserAddress(from);
+        await getTokenBalance(from);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -97,6 +95,7 @@ function App() {
           onChange={(e) => setUserAddress(e.target.value)}
           color="black"
           w="600px"
+          value={userAddress}
           textAlign="center"
           p={4}
           bgColor="white"
@@ -118,7 +117,7 @@ function App() {
                   p={10}
                   bg="skyblue"
                   w={'20vw'}
-                  key={e.id}
+                  key={i}
                 >
                   <Box>
                     <b>Symbol:</b> ${tokenDataObjects[i].symbol}&nbsp;
