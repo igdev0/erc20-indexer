@@ -6,7 +6,7 @@ import {
   Heading,
   Image,
   Input,
-  SimpleGrid,
+  SimpleGrid, Spinner,
   Text,
 } from '@chakra-ui/react';
 import {Alchemy, Network, Utils} from 'alchemy-sdk';
@@ -15,6 +15,7 @@ import {ethers} from 'ethers';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
   const [results, setResults] = useState([]);
   const [hasQueried, setHasQueried] = useState(false);
   const [tokenDataObjects, setTokenDataObjects] = useState([]);
@@ -24,6 +25,8 @@ function App() {
       apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
       network: Network.ETH_SEPOLIA,
     };
+
+    setIsFetching(true);
 
     const alchemy = new Alchemy(config);
     const data = await alchemy.core.getTokenBalances(address);
@@ -41,6 +44,7 @@ function App() {
 
     setTokenDataObjects(await Promise.all(tokenDataPromises));
     setHasQueried(true);
+    setIsFetching(false);
   }
 
   async function signIn() {
@@ -104,9 +108,8 @@ function App() {
         <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor="skyblue">
           Check ERC-20 Token Balances
         </Button>
-
         <Heading my={36}>ERC-20 token balances:</Heading>
-
+        {isFetching && <Spinner color="teal.500" size="lg" />}
         {hasQueried ? (
           <SimpleGrid w={'90vw'} columns={4} spacing={24}>
             {results.tokenBalances.map((e, i) => {
