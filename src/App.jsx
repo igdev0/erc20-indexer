@@ -12,24 +12,35 @@ import {
 import {Alchemy, Network, Utils} from 'alchemy-sdk';
 import { useState } from 'react';
 import {ethers} from 'ethers';
+import {isAddress} from 'ethers/lib/utils';
+import Buffer from 'vite-plugin-node-polyfills/shims/buffer/index.js';
 
+const provider = new ethers.providers.Web3Provider(window.ethereum);
 function App() {
   const [userAddress, setUserAddress] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [results, setResults] = useState([]);
   const [hasQueried, setHasQueried] = useState(false);
   const [tokenDataObjects, setTokenDataObjects] = useState([]);
-
+  const [error, setError] = useState(null);
   async function getTokenBalance(argAddr) {
-    console.log(argAddr)
-    const address = argAddr ? argAddr : userAddress;
+    setError("");
+    let address = argAddr ? argAddr : userAddress;
+
+    if(!isAddress(address)) {
+      try {
+        address = await provider.resolveName(address);
+      } catch (err) {
+        setError("Unable to resolve ens");
+        return;
+      }
+    }
     const config = {
       apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
       network: Network.ETH_SEPOLIA,
     };
 
     setIsFetching(true);
-
     const alchemy = new Alchemy(config);
     const data = await alchemy.core.getTokenBalances(address);
 
@@ -50,6 +61,7 @@ function App() {
   }
 
   async function signIn() {
+    setError("");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     try {
       const [from] = await provider.send("eth_requestAccounts", []);
@@ -65,6 +77,7 @@ function App() {
         await getTokenBalance(from);
       }
     } catch (err) {
+      setError(err.message);
       console.error(err);
     }
   }
@@ -85,6 +98,12 @@ function App() {
             token balances!
           </Text>
         </Flex>
+        {
+          error &&
+        <Text color="red">
+          {error}
+        </Text>
+        }
       </Center>
       <Flex
         w="100%"
