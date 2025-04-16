@@ -9,8 +9,9 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
-import { Alchemy, Network, Utils } from 'alchemy-sdk';
+import {Alchemy, Network, Utils} from 'alchemy-sdk';
 import { useState } from 'react';
+import {ethers} from 'ethers';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
@@ -41,6 +42,29 @@ function App() {
     setTokenDataObjects(await Promise.all(tokenDataPromises));
     setHasQueried(true);
   }
+
+  async function signIn() {
+    const msg = {
+      msg: `Sign in wih indexer app`,
+      nonce: Math.random() * 100
+    }
+
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const exampleMessage = "Example `personal_sign` message."
+    try {
+      const [from] = await provider.listAccounts();
+      // For historical reasons, you must submit the message to sign in hex-encoded UTF-8.
+      // This uses a Node.js-style buffer shim in the browser.
+      const msg = `0x${Buffer.from(exampleMessage, "utf8").toString("hex")}`
+      const sign = await provider.send("personal_sign", [msg, from]);
+      console.log(sign);
+      setUserAddress(from)
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <Box w="100vw">
       <Center>
@@ -67,6 +91,8 @@ function App() {
         <Heading mt={42}>
           Get all the ERC-20 token balances of this address:
         </Heading>
+        <Button variant="outline" onClick={signIn}>Connect wallet</Button>
+        <Heading mt={2}>Or</Heading>
         <Input
           onChange={(e) => setUserAddress(e.target.value)}
           color="black"
@@ -76,7 +102,7 @@ function App() {
           bgColor="white"
           fontSize={24}
         />
-        <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor="blue">
+        <Button fontSize={20} onClick={getTokenBalance} mt={36} bgColor="skyblue">
           Check ERC-20 Token Balances
         </Button>
 
@@ -89,7 +115,8 @@ function App() {
                 <Flex
                   flexDir={'column'}
                   color="white"
-                  bg="blue"
+                  p={10}
+                  bg="skyblue"
                   w={'20vw'}
                   key={e.id}
                 >
