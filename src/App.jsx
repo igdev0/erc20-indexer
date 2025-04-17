@@ -73,7 +73,7 @@ function App() {
         <div
             className="w-full h-screen border-30 border-amber-200 flex justify-center p-2 overflow-auto items-center flex-col">
             <div className="text-center w-full max-w-[500px] mx-auto">
-                <h1 className="text-4xl font-bold w-full align-baseline mb-2">Find all your ERC20 Token balances</h1>
+                <h1 className="text-4xl font-bold w-full align-baseline mb-2">Find all your ERC-20<br/> Token balances</h1>
                 <button
                     className="btn btn--pill btn--primary inline-flex justify-between gap-2 items-center self-center"
                     onClick={signIn}>
