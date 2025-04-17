@@ -4,10 +4,7 @@ import {BsSearch} from 'react-icons/bs';
 import {AppContext} from './context.js';
 import {BigNumber} from 'alchemy-sdk';
 import {TiTimes} from 'react-icons/ti';
-import {AiFillWallet} from 'react-icons/ai';
 import {BiWallet} from 'react-icons/bi';
-
-const DUMMY_DATA = []
 
 function App() {
     const {provider, alchemy} = useContext(AppContext)
