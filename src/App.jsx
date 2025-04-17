@@ -1,4 +1,4 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import {ethers, isAddress} from 'ethers';
 import {BsSearch} from 'react-icons/bs';
 import {AppContext} from './context.js';
@@ -14,9 +14,9 @@ function App() {
     const [error, setError] = useState(null);
 
 
-    const getTokenBalance = useCallback(async () => {
+    const getTokenBalance = async (props) => {
         setError("");
-        let address = userAddress;
+        let address = props.userAddress ? props.userAddress : userAddress;
         setIsFetching(true);
         if (!isAddress(address)) {
             try {
@@ -47,7 +47,7 @@ function App() {
         });
         setResults(tokenBalancesResponseErc20);
         setIsFetching(false);
-    }, [userAddress]);
+    };
 
     async function signIn() {
         setError("");
@@ -60,10 +60,7 @@ function App() {
             const valid = ethers.verifyMessage(message, signature);
             if (valid.toLowerCase() === from) {
                 setUserAddress(from);
-                const timer = setTimeout(() => {
-                    getTokenBalance();
-                    clearTimeout(timer);
-                }, 0) // needs to wait for a second so react can update the state
+                await getTokenBalance({userAddress: from});
             }
 
         } catch (err) {
@@ -77,7 +74,9 @@ function App() {
             className="w-full h-screen border-30 border-amber-200 flex justify-center p-2 overflow-auto items-center flex-col">
             <div className="text-center w-full max-w-[500px] mx-auto">
                 <h1 className="text-4xl font-bold w-full align-baseline mb-2">Find all your ERC20 Token balances</h1>
-                <button className="btn btn--pill btn--primary inline-flex justify-between gap-2 items-center self-center" onClick={signIn}>
+                <button
+                    className="btn btn--pill btn--primary inline-flex justify-between gap-2 items-center self-center"
+                    onClick={signIn}>
                     Sign in with your wallet <BiWallet/>
                 </button>
                 <h4 className="text-xl my-4">Or type the address/ENS</h4>
