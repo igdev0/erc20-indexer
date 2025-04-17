@@ -1,4 +1,4 @@
-import {useCallback, useContext, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import {ethers, isAddress} from 'ethers';
 import {BsSearch} from 'react-icons/bs';
 import {AppContext} from './context.js';
@@ -75,11 +75,12 @@ function App() {
     return (
         <div
             className="w-full h-screen border-30 border-amber-200 flex justify-center p-2 overflow-auto items-center flex-col">
-            <div className="text-center w-full max-w-[440px] mx-auto">
+            <div className="text-center w-full max-w-[500px] mx-auto">
+                <h1 className="text-4xl font-bold w-full align-baseline mb-2">Find all your ERC20 Token balances</h1>
                 <button className="btn btn--pill btn--primary inline-flex justify-between gap-2 items-center self-center" onClick={signIn}>
                     Sign in with your wallet <BiWallet/>
                 </button>
-                <h4 className="text-3xl my-4">Or type the address/ENS</h4>
+                <h4 className="text-xl my-4">Or type the address/ENS</h4>
                 <fieldset className="flex justify-center">
                     <input
                         className={`border-l-2 border-t-2 border-b-2 ${!userAddress.length || isFetching ? 'border-gray-300' : 'border-amber-400'} rounded-l-sm p-2 max-w-[400px] w-full outline-none`}
