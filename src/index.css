@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+
+@layer components {
+    .btn {
+        @apply py-2 px-3 cursor-pointer transition-all cursor-pointer shadow-sm;
+    }
+
+    .btn--primary {
+        @apply bg-amber-400 hover:bg-amber-500;
+    }
+
+    .btn--pill {
+        @apply rounded-3xl;
+    }
+
+    .btn-icon {
+        @apply
+    }
+}
