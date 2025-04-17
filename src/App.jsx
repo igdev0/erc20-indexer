@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {ethers} from 'ethers';
 import {isAddress} from 'ethers';
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
+const provider = new ethers.BrowserProvider(window.ethereum);
 function App() {
   const [userAddress, setUserAddress] = useState('');
   const [isFetching, setIsFetching] = useState(false);
@@ -56,7 +56,6 @@ function App() {
 
   async function signIn() {
     setError("");
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
     try {
       const [from] = await provider.send("eth_requestAccounts", []);
 
@@ -78,7 +77,7 @@ function App() {
 
   return (
     <div>
-      Hello
+      <h1 className="text-4xl">Hello</h1>
     </div>
   );
 }
