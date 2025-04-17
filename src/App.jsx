@@ -17,7 +17,7 @@ function App() {
     const getTokenBalance = useCallback(async () => {
         setError("");
         let address = userAddress;
-
+        setIsFetching(true);
         if (!isAddress(address)) {
             try {
                 address = await provider.resolveName(address);
