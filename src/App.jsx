@@ -1,14 +1,3 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Image,
-  Input,
-  SimpleGrid, Spinner,
-  Text,
-} from '@chakra-ui/react';
 import {Alchemy, Network, Utils} from 'alchemy-sdk';
 import { useState } from 'react';
 import {ethers} from 'ethers';
@@ -89,86 +78,9 @@ function App() {
   }
 
   return (
-    <Box w="100vw">
-      <Center>
-        <Flex
-          alignItems={'center'}
-          justifyContent="center"
-          flexDirection={'column'}
-        >
-          <Heading mb={0} fontSize={36}>
-            ERC-20 Token Indexer
-          </Heading>
-          <Text>
-            Plug in an address and this website will return all of its ERC-20
-            token balances!
-          </Text>
-          {
-              error &&
-              <Text color="red">
-                {error}
-              </Text>
-          }
-        </Flex>
-      </Center>
-      <Flex
-        w="100%"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent={'center'}
-      >
-        <Heading mt={42}>
-          Get all the ERC-20 token balances of this address:
-        </Heading>
-        <Button variant="outline" onClick={signIn}>Connect wallet</Button>
-        <Heading mt={2}>Or</Heading>
-        <Input
-          onChange={(e) => setUserAddress(e.target.value)}
-          color="black"
-          w="600px"
-          value={userAddress}
-          textAlign="center"
-          p={4}
-          bgColor="white"
-          fontSize={24}
-        />
-        <Button fontSize={20} onClick={() => getTokenBalance()} mt={36} bgColor="skyblue">
-          Check ERC-20 Token Balances
-        </Button>
-        <Heading my={36}>ERC-20 token balances:</Heading>
-        {isFetching && <Spinner color="teal.500" style={{width: 50, height: 50}} />}
-        {hasQueried ? (
-          <SimpleGrid w={'90vw'} columns={4} spacing={24}>
-            {results.tokenBalances.map((e, i) => {
-              return (
-                <Flex
-                  flexDir={'column'}
-                  color="white"
-                  p={10}
-                  bg="skyblue"
-                  w={'20vw'}
-                  key={i}
-                >
-                  <Box>
-                    <b>Symbol:</b> ${tokenDataObjects[i].symbol}&nbsp;
-                  </Box>
-                  <Box>
-                    <b>Balance:</b>&nbsp;
-                    {Utils.formatUnits(
-                      e.tokenBalance,
-                      tokenDataObjects[i].decimals
-                    )}
-                  </Box>
-                  <Image src={tokenDataObjects[i].logo} width={30} height={30}/>
-                </Flex>
-              );
-            })}
-          </SimpleGrid>
-        ) : (
-          'Please make a query! This may take a few seconds...'
-        )}
-      </Flex>
-    </Box>
+    <div>
+      Hello
+    </div>
   );
 }
 
