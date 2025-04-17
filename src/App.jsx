@@ -1,8 +1,7 @@
 import {Alchemy, Network, Utils} from 'alchemy-sdk';
 import { useState } from 'react';
 import {ethers} from 'ethers';
-import {isAddress} from 'ethers/lib/utils';
-import Buffer from 'vite-plugin-node-polyfills/shims/buffer/index.js';
+import {isAddress} from 'ethers';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 function App() {
